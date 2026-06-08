@@ -28,3 +28,9 @@ back/__pycache__/
 *.njsproj
 *.sln
 *.sw?
+
+#캐시??
+__pycache__/
+*.py[cod]
+back/**/__pycache__/
+back/**/*.pyc
