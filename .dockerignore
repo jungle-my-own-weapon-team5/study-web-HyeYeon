@@ -1,0 +1,16 @@
+.git
+.vscode
+.idea
+
+**/__pycache__
+**/*.pyc
+back/.venv
+back/.env
+
+front/node_modules
+front/dist
+front/build
+
+*.log
+npm-debug.log*
+yarn-debug.log*

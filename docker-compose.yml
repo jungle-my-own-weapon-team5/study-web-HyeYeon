@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:16
+    image: pgvector/pgvector:pg16
     container_name: study_web_postgres
     environment:
       POSTGRES_USER: study_user
@@ -10,6 +10,44 @@ services:
       - "5434:5432"
     volumes:
       - study_web_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U study_user -d study_web_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: back/Dockerfile
+    container_name: study_web_backend
+    environment:
+      DATABASE_URL: postgresql://study_user:study_password@postgres:5432/study_web_db
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./back:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  frontend:
+    build:
+      context: .
+      dockerfile: front/Dockerfile
+    container_name: study_web_frontend
+    environment:
+      VITE_API_BASE_URL: http://localhost:8000
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./front:/app
+      - study_web_frontend_node_modules:/app/node_modules
+    depends_on:
+      - backend
+    command: npm run dev -- --host 0.0.0.0 --port 5173
 
 volumes:
   study_web_postgres_data:
+  study_web_frontend_node_modules:
