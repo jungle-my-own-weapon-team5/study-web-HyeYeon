@@ -6,7 +6,6 @@ function App() {
   // 모드: 'login' | 'register' | 'me'
   const [mode, setMode] = useState('login');
 
-  // mode에 따라 LoginPage/RegisterPage/MePage를 보여준다.
 
   return (
     <main>
@@ -19,11 +18,12 @@ function App() {
         </button>
       </nav>
 
+      {/* mode에 따라 LoginPage/RegisterPage/MePage를 보여준다. */} 
       {mode === 'register' && <RegisterPage />}
+
+      
     </main>
   )
 }
-
-
 
 export default App
