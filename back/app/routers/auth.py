@@ -42,7 +42,7 @@ def create_access_token(data: dict) -> str:
 def verify_token(token: str) -> int:
     credentials_exception = HTTPException(
         status_code = 401,
-        detail="Could not validate credentials",
+        detail="인증 정보가 유효하지 않습니다.",
     )
 
     try:
@@ -64,7 +64,7 @@ def get_current_user(
 ) -> models.User:
     credentials_exception = HTTPException(
         status_code = 401,
-        detail="Could not validate credentials",
+        detail="인증 정보가 유효하지 않습니다.",
     )
 
     user_id = verify_token(token)
@@ -86,10 +86,8 @@ def register(user_in: schemas.UserCreate, db: Session = Depends(get_db)):
 
     # user 객체를 만든다
     user = models.User(
-
         email = user_in.email,
         hashed_password=hash_password(user_in.password),
-        
     )
 
     #저장 예정 상태로 등록
@@ -116,7 +114,7 @@ def login(
     # password가 틀리면 로그인 실패.
     if user is None or \
         not verify_password(user_in.password, user.hashed_password): 
-        raise HTTPException(status_code=401, detail="Invalid email or password")
+        raise HTTPException(status_code=401, detail="이메일이나 비밀번호가 틀렸습니다.")
     
     # 맞으면 token을 만들어 반환한다.
     access_token = create_access_token({"sub": str(user.id)})
