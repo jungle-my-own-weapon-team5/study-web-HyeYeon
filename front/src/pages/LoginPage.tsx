@@ -2,8 +2,11 @@ import { useState, type FormEvent } from 'react'
 import { login } from '../api/client'
 import {saveToken} from '../api/token'
 
-import { TextInput } from '../components/TextInput';
-import {SubmitButton} from '../components/SubmitButton';
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 
 export function LoginPage(){
     const [email, setEmail] = useState('');
@@ -47,20 +50,36 @@ export function LoginPage(){
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h1>로그인</h1>
-            <TextInput value={email}
-                onChange={setEmail}
-                placeholder="email"/>
-            <TextInput value={password}
-                onChange={setPassword}
-                placeholder="password"/>
-            <SubmitButton 
-                children = {loading ? '로그인 중...' : '로그인'}
-                type="submit" 
-                disabled={loading} />
-            {message && <p>{message}</p>}
-            {error && <p>{error}</p>}
-        </form>
+        <Card className="mx-auto w-full max-w-md">
+            <CardTitle>
+                <CardHeader>로그인</CardHeader>
+            </CardTitle>
+
+            <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-2">
+                    <Label htmlFor="login-email">이메일</Label>
+                    <Input id="login-email" value={email} onChange={(event) => setEmail(event.target.value)} />
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="login-password">비밀번호</Label>
+                    <Input id="login-password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
+                </div>
+
+                <Button type="submit" disabled={loading} className="w-full">
+                    {loading ? '로그인 중...' : '로그인'}
+                </Button>
+
+                {message && <p>{message}</p>}
+                {error && (
+                    <Alert variant="destructive">
+                    <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                )}
+
+                </form>
+            </CardContent>
+        </Card>
     )
 }

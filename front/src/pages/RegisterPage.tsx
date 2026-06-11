@@ -1,7 +1,16 @@
 import { useState, type FormEvent } from 'react'
 import { register } from '../api/client'
-import { TextInput } from '../components/TextInput';
-import { SubmitButton } from '../components/SubmitButton';
+
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Alert, AlertDescription } from '@/components/ui/alert'
 
 export function RegisterPage() {
   const [email, setEmail] = useState(''); 
@@ -44,27 +53,60 @@ export function RegisterPage() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    // <form onSubmit={handleSubmit}>
 
-      <h1>회원가입</h1>
-      <TextInput value={email} 
-        onChange={setEmail}
-        placeholder= "email"
-      />
-      <TextInput value={password}
-        onChange={setPassword}
-        placeholder= "password"
-      />
-      <SubmitButton 
-        children={loading ? '가입 중 ...' : '가입'}
-        type="submit" 
-        disabled={loading} 
-        />
+    //   <h1>회원가입</h1>
+    //   <TextInput value={email} 
+    //     onChange={setEmail}
+    //     placeholder= "email"
+    //   />
+    //   <TextInput value={password}
+    //     onChange={setPassword}
+    //     placeholder= "password"
+    //   />
+    //   <SubmitButton 
+    //     children={loading ? '가입 중 ...' : '가입'}
+    //     type="submit" 
+    //     disabled={loading} 
+    //     />
         
 
-      {/* error/message 출력 */}
-      {message && <p>{message}</p>}
-      {error && <p>{error}</p>}
-    </form>
+    //   {/* error/message 출력 */}
+    //   {message && <p>{message}</p>}
+    //   {error && <p>{error}</p>}
+    // </form>
+    <Card className="mx-auto w-full max-w-md">
+      <CardHeader>
+        <CardTitle>회원가입</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-4">
+
+        <div className="space-y-2">
+          <Label htmlFor="login-email">이메일</Label>
+          <Input value={email} 
+            onChange={ (event) => {setEmail(event.target.value)}}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="login-password">비밀번호</Label>
+          <Input id="login-password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
+        </div>
+
+        <Button type="submit" disabled={loading} className='w-full'>
+          {loading ? '가입 중 ...' : '가입'}
+        </Button>
+
+        {message && <p>{message}</p>}
+        {error && (
+            <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+            </Alert>
+        )}
+
+        </form>
+      </CardContent>
+    </Card>
   )
 }
