@@ -2,7 +2,7 @@ const TOKEN_KEY = "access_token"
 
 export function saveToken(token: string) {
   // localStorage에 token 저장
-  localStorage.setItemI(TOKEN_KEY, token)
+  localStorage.setItem(TOKEN_KEY, token)
 }
 
 export function getToken() {
