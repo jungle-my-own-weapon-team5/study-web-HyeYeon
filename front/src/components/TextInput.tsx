@@ -5,7 +5,9 @@ type TextInputProps = {
     type?: string
 }
 
-export function TextInput ({ value, onChange, placeholder, type='text'}: TextInputProps){
+export function TextInput
+    ({ value, onChange, placeholder, type='text'}: TextInputProps)
+{
     return (
         <input
             value={value}
