@@ -34,3 +34,6 @@ __pycache__/
 *.py[cod]
 back/**/__pycache__/
 back/**/*.pyc
+
+#npm 패키지 폴더
+node_modules/
