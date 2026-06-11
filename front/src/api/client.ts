@@ -61,3 +61,8 @@ export async function register(input: RegisterInput) {
         body: JSON.stringify(input),
     })
 }
+
+// User 정보 가져오는 API
+export function getMe(): Promise<User>{
+    return request<User>('/auth/me');
+}
