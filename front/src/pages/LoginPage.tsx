@@ -1,7 +1,9 @@
 import { useState, type FormEvent } from 'react'
 import { login } from '../api/client'
 import {saveToken} from '../api/token'
+
 import { TextInput } from '../components/TextInput';
+import {SubmitButton} from '../components/SubmitButton';
 
 export function LoginPage(){
     const [email, setEmail] = useState('');
@@ -53,8 +55,10 @@ export function LoginPage(){
             <TextInput value={password}
                 onChange={setPassword}
                 placeholder="password"/>
-            <button type="submit" disabled={loading}>
-                {loading ? '로그인 중...' : '로그인'}</button>
+            <SubmitButton 
+                children = {loading ? '로그인 중...' : '로그인'}
+                type="submit" 
+                disabled={loading} />
             {message && <p>{message}</p>}
             {error && <p>{error}</p>}
         </form>

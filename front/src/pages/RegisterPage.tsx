@@ -1,5 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { register } from '../api/client'
+import { TextInput } from '../components/TextInput';
+import { SubmitButton } from '../components/SubmitButton';
 
 export function RegisterPage() {
   const [email, setEmail] = useState(''); 
@@ -45,16 +47,20 @@ export function RegisterPage() {
     <form onSubmit={handleSubmit}>
 
       <h1>회원가입</h1>
-      <input value={email} 
-        onChange={(e)=>{setEmail(e.target.value)}}
+      <TextInput value={email} 
+        onChange={setEmail}
         placeholder= "email"
       />
-      <input value={password}
-        onChange={(e)=>{setPassword(e.target.value)}}
+      <TextInput value={password}
+        onChange={setPassword}
         placeholder= "password"
       />
-      <button type="submit" disabled={loading}>
-        {loading ? '가입 중 ...' : '가입'}</button>
+      <SubmitButton 
+        children={loading ? '가입 중 ...' : '가입'}
+        type="submit" 
+        disabled={loading} 
+        />
+        
 
       {/* error/message 출력 */}
       {message && <p>{message}</p>}
