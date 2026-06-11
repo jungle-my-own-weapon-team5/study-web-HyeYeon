@@ -24,19 +24,50 @@ export async function request<T>(path: string, options: RequestInit = {}): Promi
     //요청 URL 만들기: API_BASE_URL +path
     const url = `${API_BASE_URL}${path}`
 
-    const response = await fetch(url, {
-        ...options,
-        headers,
-    });
 
+
+
+
+
+
+
+
+
+
+
+
+
+    let response: Response
+    try{
+         response = await fetch(url, {
+            ...options,
+            headers,
+        });
+    }
+    catch(error) {
+        throw new Error("서버에 연결할 수 없습니다.")
+    }
+        
     //예외처리
     // response.ok는 HTTP status가 200~299일 때 true
     if(!response.ok) {
         const errorBody = await response.json().catch(() => null);
-        const message = errorBody?.detail ?? "요청에 실패했습니다.";
 
+        let message = "요청에 실패했습니다.";
+
+        if(typeof errorBody?.detail === "string"){
+            message = errorBody.detail;
+        }
+        else if (Array.isArray(errorBody?.detail)){
+            message = errorBody.detail
+                .map((validationError: { msg?: string }) => validationError.msg)
+                .filter((msg: string | undefined): msg is string => Boolean(msg))
+                .join("\n")
+        }
         throw new Error(message);
     }
+    
+
 
     //2. 응답 바디 json으로 추출
     const data = await response.json();
