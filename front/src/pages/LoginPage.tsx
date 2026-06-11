@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
-import { login } from '../api/client'
-import {saveToken} from '../api/token'
+import { login } from '@/api/client'
+import { useAuthStore } from '@/stores/authStore'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -14,6 +14,7 @@ export function LoginPage(){
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const setToken = useAuthStore((state) => state.setToken)
     
     async function handleSubmit(event:FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -35,9 +36,11 @@ export function LoginPage(){
                 email, 
                 password
             }
-
             const result = await login(LoginInput);
-            saveToken(result.access_token);
+
+            // store 액션(setToken)을 호출 =>로그인 성공 사실을 전역 상태가 알게 함
+            setToken (result.access_token);
+
             setMessage('로그인 완료');
         }
         catch (error) {

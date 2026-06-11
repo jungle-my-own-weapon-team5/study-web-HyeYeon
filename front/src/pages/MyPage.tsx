@@ -1,12 +1,14 @@
 import { useState } from 'react'
-import type { User } from '../types/auth'
-import {getMe} from '../api/client'
-import { SubmitButton } from '../components/SubmitButton';
+import type { User } from '@/types/auth'
+import { useAuthStore } from '@/stores/authStore';
+import { Button } from '@/components/ui/button';
 
 export function MyPage() {
     const [user, setUser] = useState<User | null>(null); 
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const fetchMe = useAuthStore((state)=>state.fetchMe)
+    const me = useAuthStore((state) => state.user)
 
     async function handleClick() {
 
@@ -14,7 +16,7 @@ export function MyPage() {
         setLoading(true)
 
         try {
-            const me = await getMe();
+            await fetchMe();
             setUser(me);
         }
         catch (error){
@@ -33,9 +35,9 @@ export function MyPage() {
             <p className="mt-1 text-sm text-slate-500">저장된 토큰으로 현재 사용자를 조회한다.</p>
             </div>
 
-            <SubmitButton type="button" disabled={loading} onClick={handleClick}> 
+            <Button type="button" disabled={loading} onClick={handleClick}> 
                 {loading ? '조회 중...' : '내 정보 조회'}
-            </SubmitButton>
+            </Button>
 
             {user && (
             <div className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">
