@@ -6,7 +6,7 @@ export function RegisterPage() {
   const [password, setPassword] = useState(''); 
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-  // loading/error/message 상태
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
 
@@ -14,8 +14,18 @@ export function RegisterPage() {
     event.preventDefault();
     setMessage('');
     setError('');
+    setLoading(true);
 
     try {
+      if(!email.trim()){
+          setError('이메일을 입력해주세요.')
+          return 
+      }
+      if(password.length < 8){
+          setError('비밀번호는 8자 이상이어야 합니다.')
+          return
+      }
+
       const registerInput = {
         email,
         password
@@ -25,6 +35,9 @@ export function RegisterPage() {
     }
     catch(error) {
       setError(error instanceof Error ? error.message : '회원가입에 실패했습니다.')
+    }
+    finally{
+      setLoading(false);
     }
   }
 
@@ -40,7 +53,8 @@ export function RegisterPage() {
         onChange={(e)=>{setPassword(e.target.value)}}
         placeholder= "password"
       />
-      <button type="submit">가입</button>
+      <button type="submit" disabled={loading}>
+        {loading ? '가입 중 ...' : '가입'}</button>
 
       {/* error/message 출력 */}
       {message && <p>{message}</p>}
