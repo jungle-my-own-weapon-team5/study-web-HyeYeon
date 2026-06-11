@@ -1,41 +1,23 @@
-import { useState } from 'react'
 import { RegisterPage } from './pages/RegisterPage'
 import { LoginPage } from './pages/LoginPage';
 import { MyPage } from './pages/MyPage';
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 
 function App() {
-
-  const [mode, setMode] = useState<'login' | 'register' | 'myPage'>('login');
-
   return (
-    <main>
-
+    <BrowserRouter>
       <nav>
-        <button type="button"
-          onClick={ ()=> setMode('register') }
-        >
-          회원가입
-        </button>
-
-        <button type="button"
-          onClick={ ()=> setMode('login') }
-        >
-          로그인
-        </button>
-
-        <button type="button"
-          onClick={ ()=> setMode('myPage') }
-        >
-          내 정보
-        </button>
+        <Link to="/login">로그인</Link>
+        <Link to="/register">회원가입</Link>
+        <Link to="/me">내 정보</Link>
       </nav>
 
-      {/* mode에 따라 LoginPage/RegisterPage/MePage를 보여준다. */} 
-      {mode === 'register' && <RegisterPage />}
-      {mode === 'login' && <LoginPage />}
-      {mode === 'myPage' && <MyPage />}
-
-    </main>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/me" element={<MyPage />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
