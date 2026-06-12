@@ -6,8 +6,9 @@ from jose import jwt, JWTError
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
-from app import models, schemas
-from back.app.auth import repository
+from app import models
+from app.auth import repository
+from app.auth import schema
 
 # region 비밀번호 hash 관련 설정
 pwd_context = CryptContext(
@@ -58,7 +59,7 @@ def verify_token(token: str) -> int:
         raise credentials_exception
 # endregion
 
-def register_user(db:Session, user_in: schemas.UserCreate) -> models.User:
+def register_user(db:Session, user_in: schema.UserCreate) -> models.User:
     # 가입하려는 email이 중복인지 확인
     existing_user = repository.get_user_by_email(db, user_in.email);
     if existing_user:
@@ -71,14 +72,14 @@ def register_user(db:Session, user_in: schemas.UserCreate) -> models.User:
         hashed_password=hashed_password
     )
 
-def login_user(db:Session, user_in: schemas.UserLogin) -> models.User:
+def login_user(db:Session, user_in: schema.UserLogin) -> models.User:
     user = repository.get_user_by_email(db, user_in.email)
     if user is None or not verify_password(user_in.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="이메일이나 비밀번호가 틀렸습니다.")
     
     access_token = create_access_token({"sub": str(user.id)})
 
-    return schemas.Token(access_token=access_token, token_type="bearer")
+    return schema.Token(access_token=access_token, token_type="bearer")
 
 def get_user_from_token(db:Session, token:str) ->models.User:
     credentials_exception = HTTPException(

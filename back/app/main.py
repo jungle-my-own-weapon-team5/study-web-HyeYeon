@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app import models
 from app.database import engine
-from app.routers import auth
+from app.auth.router import router as auth_router
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -22,7 +22,7 @@ app.add_middleware(
 )
 
 
-app.include_router(auth.router)
+app.include_router(auth_router)
 
 @app.get("/")
 async def root():
