@@ -10,6 +10,8 @@ import { MyPage } from './pages/MyPage';
 
 import { PostListPage } from './pages/PostListPage'
 import { PostDetailPage } from './pages/PostDetailPage'
+import { PostCreatePage } from './pages/PostCreatePage'
+
 import { Button } from '@/components/ui/button'
 
 function App() {
@@ -83,6 +85,15 @@ function App() {
               />
               <Route path="/posts" element={<PostListPage />} /> 
               <Route path="/posts/:postId" element={<PostDetailPage />} /> 
+              <Route
+                path="/posts/new"
+                element={
+                  <ProtectedRoute>
+                    <PostCreatePage />
+                  </ProtectedRoute>
+                }
+              />
+              
             </Routes>
           </section>
         </div>
