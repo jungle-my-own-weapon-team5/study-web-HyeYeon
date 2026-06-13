@@ -20,5 +20,11 @@ class PostResponse(BaseModel):
 
     model_config = {"from_attributes": True}
 
+class PostListResponse(BaseModel):
+    items:list[PostResponse]
+    total: int
+    page: int
+    page_size: int
+    total_pages:int
 class PostDeleteResponse(BaseModel):
     message: str

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -7,6 +7,7 @@ from app.auth.router import get_current_user
 from app import models
 from app.posts import schema
 from app.posts import service
+
 
 router = APIRouter(prefix="/posts", tags=["posts"])
 
@@ -20,11 +21,13 @@ def create_post(
     return service.create_post(db=db, post_in=post_in,current_user=current_user)
 
 #전체 게시글 조회
-@router.get("", response_model=list[schema.PostResponse])
+@router.get("", response_model=schema.PostListResponse)
 def list_posts(
+    page: int = Query(1, ge=1),
+    page_size: int=Query(1, ge=1, le=50),
     db: Session = Depends(get_db)
 ):
-    return  service.list_posts(db)
+    return  service.list_posts(db, page=page, page_size=page_size)
 
 #게시글 id기반 단건 조회
 @router.get("/{post_id}", response_model=schema.PostResponse)

@@ -3,6 +3,10 @@ from sqlalchemy.orm import Session
 from app.posts import schema
 from app import models
 
+#전체 게시글 개수 조회
+def count_posts(db: Session) -> int:
+    return db.query(models.Post).count()
+
 #게시글 생성
 def create_post(
     db: Session,
@@ -22,9 +26,17 @@ def create_post(
 
 #전체 게시글 조회
 def list_posts(
-    db: Session
-)->list[models.Post]:
-    return db.query(models.Post).order_by(models.Post.created_at.desc()).all()
+    db: Session, 
+    offset: int, 
+    limit: int
+) -> list[models.Post]:
+    return (
+        db.query(models.Post)
+        .order_by(models.Post.created_at.desc())
+        .offset(offset)
+        .limit(limit)
+        .all()
+    )
 
 #id로 게시글 단건 조회
 def get_post_by_id(

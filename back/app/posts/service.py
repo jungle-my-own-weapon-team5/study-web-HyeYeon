@@ -1,3 +1,4 @@
+import math
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 
@@ -16,8 +17,28 @@ def create_post(
         author_id=current_user.id
     )
 
-def list_posts(db: Session) -> list[models.Post]:
-    return repository.list_posts(db)
+def list_posts(db: Session, page:int, page_size:int
+) -> schema.PostListResponse:
+    
+    if page < 1:
+        raise HTTPException(status_code=400, detail="page는 1 이상이어야 합니다.")
+
+    if page_size < 1 or page_size > 50:
+        raise HTTPException(status_code=400, detail="page_size는 1 이상 50 이하여야 합니다.")
+
+    total = repository.count_posts(db)
+    total_pages = max(1, math.ceil(total / page_size))
+    offset = (page - 1) * page_size
+
+    posts = repository.list_posts(db, offset=offset, limit=page_size)
+
+    return schema.PostListResponse(
+        items=posts,
+        total=total,
+        page=page,
+        page_size=page_size,
+        total_pages=total_pages,
+    )
 
 def get_post(db: Session, post_id: int):
     post = repository.get_post_by_id(db, post_id)
