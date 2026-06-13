@@ -9,6 +9,8 @@ import { LoginPage } from './pages/LoginPage';
 import { MyPage } from './pages/MyPage';
 
 import { PostListPage } from './pages/PostListPage'
+import { PostDetailPage } from './pages/PostDetailPage'
+import { Button } from '@/components/ui/button'
 
 function App() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
@@ -39,26 +41,28 @@ function App() {
           <nav className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm">
             <h1 className="text-lg font-semibold">게시판 개인 구현</h1>
             <div className="flex gap-2">
-
+              <Button variant="ghost" asChild>
+                <Link to="/posts">게시판</Link>
+              </Button>
               {!isAuthenticated && (
                 <>
-                  <Link className="rounded-md px-3 py-2 text-sm font-medium hover:bg-slate-100" to="/register">회원가입</Link>
-                  <Link className="rounded-md px-3 py-2 text-sm font-medium hover:bg-slate-100" to="/login">로그인</Link>
+                  <Button variant="ghost" asChild>
+                    <Link to="/register">회원가입</Link>  
+                  </Button>
+                  <Button variant="ghost" asChild>
+                    <Link to="/login">로그인</Link>  
+                  </Button>
                 </>
               )}
 
               {isAuthenticated && (
                 <>
-                  <Link className="rounded-md px-3 py-2 text-sm font-medium hover:bg-slate-100" to="/me">
-                    내 정보
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={logout}
-                    className="rounded-md px-3 py-2 text-sm font-medium hover:bg-slate-100"
-                  >
-                    로그아웃
-                  </button>
+                  <Button variant="ghost" asChild>
+                    <Link to="/me">내 정보</Link>  
+                  </Button>
+                  <Button variant="ghost" asChild>
+                    <p onClick={logout}>로그아웃</p>  
+                  </Button>
                 </>
               )}
             </div>
@@ -77,7 +81,8 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route path="/posts" element={<PostListPage />} />
+              <Route path="/posts" element={<PostListPage />} /> 
+              <Route path="/posts/:postId" element={<PostDetailPage />} /> 
             </Routes>
           </section>
         </div>
