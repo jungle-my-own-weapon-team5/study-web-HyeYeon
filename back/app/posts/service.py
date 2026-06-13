@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 
-from back.app import models
+from app import models
 from app.posts import schema
 from app.posts import repository
 

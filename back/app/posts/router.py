@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.auth.router import get_current_user
 
-from back.app import models
+from app import models
 from app.posts import schema
 from app.posts import service
 
@@ -27,7 +27,7 @@ def list_posts(
     return  service.list_posts(db)
 
 #게시글 id기반 단건 조회
-@router.get("{post_id}", response_model=schema.PostResponse)
+@router.get("/{post_id}", response_model=schema.PostResponse)
 def list_posts(
     db: Session = Depends(get_db),
     post_id = int,

@@ -6,7 +6,7 @@ from jose import jwt, JWTError
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
-from back.app import models
+from app import models
 from app.auth import repository
 from app.auth import schema
 

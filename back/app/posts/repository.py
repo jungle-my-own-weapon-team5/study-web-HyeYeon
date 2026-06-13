@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app.posts import schema
-from back.app import models
+from app import models
 
 #게시글 생성
 def create_post(
