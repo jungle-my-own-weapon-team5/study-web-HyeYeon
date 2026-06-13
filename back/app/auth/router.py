@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Depends
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
-from app import models
+from back.app import models
 from app.database import get_db
 from app.auth import service
 from app.auth import schema
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 def get_current_user(
     token: str = Depends(oauth2_scheme),
     db: Session = Depends(get_db)
@@ -27,6 +27,18 @@ def login(
     user_in:schema.UserLogin, 
     db: Session = Depends(get_db), 
 ):
+    return service.login_user(db, user_in)
+
+# Swagger Authorize 전용 로그인
+@router.post("/token", response_model=schema.Token)
+def login_for_swagger(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db),
+):
+    user_in = schema.UserLogin(
+        email=form_data.username,
+        password=form_data.password,
+    )
     return service.login_user(db, user_in)
 
 #테스트 API
