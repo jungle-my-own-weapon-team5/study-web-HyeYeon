@@ -7,6 +7,14 @@ export interface Post{
     updated_at: string;
 }
 
+export interface PostListResponse {
+    items: Post[]
+    total: number
+    page: number
+    page_size: number
+    total_pages: number
+}
+
 export interface PostInput{
     title:string;
     content:string;
