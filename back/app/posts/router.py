@@ -12,7 +12,7 @@ from app.posts import service
 router = APIRouter(prefix="/posts", tags=["posts"])
 
 #게시글 작성
-@router.post("", response_model=schema.PostResponse)
+@router.post("/new", response_model=schema.PostResponse)
 def create_post(
     post_in: schema.PostCreate,
     db: Session = Depends(get_db),
