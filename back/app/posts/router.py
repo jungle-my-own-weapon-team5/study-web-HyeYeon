@@ -32,7 +32,7 @@ def list_posts(
 #게시글 id기반 단건 조회
 @router.get("/{post_id}", response_model=schema.PostResponse)
 def list_posts(
+    post_id : int,
     db: Session = Depends(get_db),
-    post_id = int,
 ):
     return service.get_post(db, post_id)
