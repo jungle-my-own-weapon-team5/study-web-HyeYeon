@@ -1,11 +1,14 @@
-import { RegisterPage } from './pages/RegisterPage'
-import { LoginPage } from './pages/LoginPage';
-import { MyPage } from './pages/MyPage';
 import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
 import { useAuthStore } from '@/stores/authStore'
 import { useEffect } from 'react'
+
+import { RegisterPage } from './pages/RegisterPage'
+import { LoginPage } from './pages/LoginPage';
+import { MyPage } from './pages/MyPage';
+
+import { PostListPage } from './pages/PostListPage'
 
 function App() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
@@ -74,6 +77,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/posts" element={<PostListPage />} />
             </Routes>
           </section>
         </div>

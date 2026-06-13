@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { login } from '@/api/client'
 import { useAuthStore } from '@/stores/authStore'
 
@@ -15,6 +16,7 @@ export function LoginPage(){
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const setToken = useAuthStore((state) => state.setToken)
+    const navigate = useNavigate()
     
     async function handleSubmit(event:FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -40,8 +42,8 @@ export function LoginPage(){
 
             // store 액션(setToken)을 호출 =>로그인 성공 사실을 전역 상태가 알게 함
             setToken (result.access_token);
-
             setMessage('로그인 완료');
+            navigate('/posts')
         }
         catch (error) {
             setError(error instanceof Error ? error.message : '로그인에 실패했습니다.')
